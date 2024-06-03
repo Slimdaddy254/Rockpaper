@@ -1,72 +1,91 @@
+let playerScore = 0;
+let computerScore = 0;
+
 function getComputerChoice() {
-    // Generate a random number between 0 and 2
+    const choices = ['rock', 'paper', 'scissors'];
     const randomNumber = Math.floor(Math.random() * 3);
-
-    // Assign rock, paper, or scissors based on the random number
-    switch (randomNumber) {
-        case 0:
-            return 'rock';
-        case 1:
-            return 'paper';
-        case 2:
-            return 'scissors';
-    }
+    return choices[randomNumber];
 }
-function playRound(playerSelection, computerSelection) {
-    // Convert playerSelection to lowercase
-    playerSelection = playerSelection.toLowerCase();
 
-    // Define win conditions
+function playRound(playerSelection, computerSelection) {
     const winConditions = {
         rock: 'scissors',
         paper: 'rock',
         scissors: 'paper'
     };
 
-    // Check if it's a tie
     if (playerSelection === computerSelection) {
-        return "tie";
+        return "It's a tie!";
     }
 
-    // Check if player wins
     if (winConditions[playerSelection] === computerSelection) {
-        return "player";
+        return "You win!";
     }
 
-    // If it's not a tie and the player hasn't won, then the computer wins
-    return "computer";
+    return "Computer wins!";
 }
 
-function playGame() {
-    let playerScore = 0;
-    let computerScore = 0;
-
-    for (let i = 0; i < 5; i++) {
-        const playerSelection = prompt("Enter your choice (rock, paper, or scissors):");
-        const computerSelection = getComputerChoice(); // Assuming you have a function to get computer's choice
-
-        const result = playRound(playerSelection, computerSelection);
-
-        if (result === "player") {
-            playerScore++;
-            console.log(`You win! ${playerSelection} beats ${computerSelection}`);
-        } else if (result === "computer") {
-            computerScore++;
-            console.log(`Computer wins! ${computerSelection} beats ${playerSelection}`);
-        } else {
-            console.log("It's a tie!");
-        }
-    }
-
-    // Determine the overall winner
-    if (playerScore > computerScore) {
-        console.log("Congratulations! You win the game.");
-    } else if (playerScore < computerScore) {
-        console.log("Sorry, you lose the game.");
-    } else {
-        console.log("It's a tie game.");
+function updateScore(result) {
+    if (result === "You win!") {
+        playerScore++;
+    } else if (result === "Computer wins!") {
+        computerScore++;
     }
 }
 
-// Call the playGame function to start the game
-playGame();
+function displayResult(playerSelection, computerSelection, result) {
+    const resultDiv = document.getElementById('result');
+    resultDiv.textContent = `You chose: ${playerSelection}, Computer chose: ${computerSelection}. ${result}`;
+}
+
+function displayScore() {
+    const scoreDiv = document.getElementById('score');
+    scoreDiv.textContent = `Player Score: ${playerScore} - Computer Score: ${computerScore}`;
+}
+
+function checkWinner() {
+    if (playerScore === 5) {
+        alert("Congratulations! You won the game!");
+        resetGame();
+    } else if (computerScore === 5) {
+        alert("Sorry, you lost the game.");
+        resetGame();
+    }
+}
+
+function resetGame() {
+    playerScore = 0;
+    computerScore = 0;
+    displayScore();
+    document.getElementById('result').textContent = '';
+}
+
+document.getElementById('rock').addEventListener('click', () => {
+    const playerSelection = 'rock';
+    const computerSelection = getComputerChoice();
+    const result = playRound(playerSelection, computerSelection);
+    updateScore(result);
+    displayResult(playerSelection, computerSelection, result);
+    displayScore();
+    checkWinner();
+});
+
+document.getElementById('paper').addEventListener('click', () => {
+    const playerSelection = 'paper';
+    const computerSelection = getComputerChoice();
+    const result = playRound(playerSelection, computerSelection);
+    updateScore(result);
+    displayResult(playerSelection, computerSelection, result);
+    displayScore();
+    checkWinner();
+});
+
+document.getElementById('scissors').addEventListener('click', () => {
+    const playerSelection = 'scissors';
+    const computerSelection = getComputerChoice();
+    const result = playRound(playerSelection, computerSelection);
+    updateScore(result);
+    displayResult(playerSelection, computerSelection, result);
+    displayScore();
+    checkWinner();
+});
